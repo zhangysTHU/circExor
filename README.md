@@ -25,6 +25,10 @@
 
 
 #### 未来开发代办
+- 美化sample_preprocessings中涉及的数据集分析统计图
+- 添加/motif分析部分，使用MEME suite中的TomTom对
+- 在evaluation中添加circlocnet作为新的基线对比模个候选kmer进行motif富集
+- 英文版README
 
 
 ## License
