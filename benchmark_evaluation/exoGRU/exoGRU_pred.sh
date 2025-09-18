@@ -1,1 +1,1 @@
-/BioII/lulab_b/huangkeyun/miniconda/bin/python /BioII/lulab_b/huangkeyun/zhangys/RNA_locator/repeated_works/exosomians/pred_EV_fasta.py /BioII/lulab_b/huangkeyun/zhangys/RNA_locator/python_scripts/ML_models/circRNA_ML_Model_Output/test_set_sequences1.fasta ./output1.csv
+/lulabdata3/huangkeyun/miniconda/bin/python /lulabdata3/huangkeyun/zhangys/RNA_locator/repeated_works/exosomians/pred_EV_fasta.py /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/ML_models/circRNA_ML_Model_tridivided_Output/test_set_sequences.fasta ./output.csv

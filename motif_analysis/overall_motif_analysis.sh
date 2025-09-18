@@ -12,8 +12,8 @@ add_len=$((flank + ( (max_kmer_len + 1) / 2 )))  # bash 中整数除法，向上
 # 对 circRNA 序列进行头尾拼接
 out_dir=./circRNA_ligated
 inputs=(
-"/lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/sample_preprocessing/circRNA/cyto_sequence.fasta"
-"/lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/sample_preprocessing/circRNA/EV_sequence.fasta"
+"/lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/reference_preprocessing/circRNA/Cyto_sequences.fasta"
+"/lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/reference_preprocessing/circRNA/EV_sequences.fasta"
 )
 for infile in "${inputs[@]}"; do
     fname=$(basename $infile)
@@ -41,8 +41,8 @@ done
 echo "circRNA sequences ligated and saved to $out_dir"
 
 # 根据kmer和circRNA序列进行kmer组装
-python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/kmer_assmble.py --kmers /lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/SHAP/cyto_kmer.fasta --circ /lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/sample_preprocessing/circRNA/cyto_sequence.fasta --out ./assmbled_kmers/cyto_nt.fasta --dedup
-python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/kmer_assmble.py --kmers /lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/SHAP/EV_kmer.fasta --circ /lulabdata3/huangkeyun/zhangys/RNA_locator/archived/circExor_archived_2025_5/sample_preprocessing/circRNA/EV_sequence.fasta --out ./assmbled_kmers/EV_nt.fasta --dedup
+python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/kmer_assmble.py --kmers /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/SHAP/cyto_kmers.fasta --circ /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/circRNA_ligated/Cyto_sequences.fasta --out ./assmbled_kmers/cyto_nt.fasta --dedup
+python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/kmer_assmble.py --kmers /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/SHAP/EV_kmers.fasta --circ /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/circRNA_ligated/EV_sequences.fasta --out ./assmbled_kmers/EV_nt.fasta --dedup
 
 # 对组装后的kmer进行多序列比对并生成共识序列
 python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/MSA_consensus.py -i ./assmbled_kmers/cyto_nt.fasta -o ./consensus_kmers/cyto
@@ -50,4 +50,4 @@ python /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/MSA_consensus.p
 
 # 将公示序列通过TomTom比对到已知RBP motif
 bash /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/cyto_motif_comparision.sh
-bash /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/EV_motif_comparision.sh
+bash /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/EV_motif_comparison.sh
