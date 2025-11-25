@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Input files
-annotation_file="/BioII/lulab_b/huangkeyun/zhangys/RNA_locator/references/exo_circRNAs_anno.txt"
-genome_file="/BioII/lulab_b/huangkeyun/zhangys/RNA_locator/references/GRCh38.p14.genome.fa"
+annotation_file="./references/exo_circRNAs_anno.txt"
+genome_file="./references/GRCh38.p14.genome.fa"
 output_file="./exo_circRNA_sequences.csv"
 
 # Extract BED file (including strand information)

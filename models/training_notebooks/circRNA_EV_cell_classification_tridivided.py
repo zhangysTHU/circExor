@@ -538,14 +538,14 @@ np.random.seed(SEED)
 warnings.filterwarnings(action='ignore')
 
 # Output dir
-output_dir = "/lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/ML_models/circRNA_ML_Model_tridivided_Output"
+output_dir = "./ML_python_scripts/ML_models/circRNA_ML_Model_tridivided_Output"
 if not (os.path.exists(output_dir)):
     os.mkdir(output_dir)
 
 # %%
 # 先划分数据集后计算
 dataset = pd.read_csv(
-    '/lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/reference_preprocessing/circRNA/output_with_sequences.csv',
+    './ML_python_scripts/reference_preprocessing/circRNA/output_with_sequences.csv',
     sep='\t',
     index_col=False
 )

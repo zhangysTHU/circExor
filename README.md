@@ -18,6 +18,25 @@ This repository provides all training and evaluation code for the circExoer proj
 7.  `/benchmark_evaluation/`: Comparison of circExor with other published models on baseline
 8.  `/motif_analysis/`: Scripts and results related to RBP finding
 
+#### Environment Setup
+
+This project's dependencies are managed with Conda.
+
+1.  **Prerequisite**: Ensure [Conda](https://docs.conda.io/en/latest/miniconda.html) is installed.
+
+2.  **Create and activate the environment** using the `spec.txt` file:
+    ````bash
+    # Create the environment
+    conda create --name your_env_name --file spec.txt
+    
+    # Activate the environment
+    conda activate your_env_name
+    ````
+
+3.  **For Jupyter Notebooks**: Since most scripts are Jupyter notebooks, you may need to install `ipykernel` to make the environment available as a Jupyter kernel.
+    ````bash
+    conda install -n your_env_name ipykernel
+    ````
 #### To Do List
 - Gradually modify absolute paths to relative paths
 - Snakemake or directly callable packaged interface
