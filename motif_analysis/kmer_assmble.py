@@ -4,16 +4,15 @@
 """
 kmer_assemble_to_meme.py
 ------------------------
-输入：
-  --kmers  : k-mer 的 FASTA（EV 或 Cyto 均可）
-  --circ   : circRNA 的 FASTA（对应 EV 或 Cyto，均可）
-输出：
-  --out    : 可直接用于 MEME 的 FASTA（默认基于 k-mer 中心 ±10 nt 的窗口片段）
+Input:
+  --kmers  : k-mer FASTA (EV or Cyto)
+  --circ   : circRNA FASTA (corresponding EV or Cyto)
+Output:
+  --out    : FASTA suitable for MEME (default windows centered on k-mer ±10 nt)
 
-两种“拼接/片段生成”模式（可选）：
-  1) window（默认）：每当在 circRNA 中命中某个 k-mer，取其“中心”±flank 的窗口
-  2) coverage      ：复用 RNAlight 的 pileup→连通→长 run 思路，输出长度≥min_len 的覆盖片段
-
+Two fragment generation modes (optional):
+  1) window  (default): for each k-mer match in circRNA, take window around its center
+  2) coverage: reuse RNAlight's pileup→connect→long-run idea, output covered fragments with length >= min_len
 """
 
 import argparse
@@ -26,15 +25,15 @@ from typing import List, Tuple, Dict, Iterable, Iterator, Optional, Set
 try:
     import numpy as np
 except ImportError:
-    np = None  # coverage 模式需要 numpy；window 模式不需要
+    np = None  # coverage mode requires numpy; window mode does not
 
 
 # -------------------------
-#      通用工具函数
+#      General utilities
 # -------------------------
 
 def read_fasta(path: str) -> Iterator[Tuple[str, str]]:
-    """简单 FASTA 读取器：返回 (seq_id, seq)；seq 自动合并多行。"""
+    """Simple FASTA reader: yields (seq_id, seq) with multi-line sequences concatenated."""
     sid, buf = None, []
     with open(path, 'r', encoding='utf-8') as fh:
         for line in fh:
@@ -53,36 +52,33 @@ def read_fasta(path: str) -> Iterator[Tuple[str, str]]:
 
 
 def write_fasta(records: Iterable[Tuple[str, str]], path: str) -> None:
-    """把 (seq_id, seq) 可迭代写成 FASTA。"""
+    """Write (seq_id, seq) iterable to FASTA."""
     with open(path, 'w', encoding='utf-8') as out:
         for sid, seq in records:
             out.write(f">{sid}\n")
-            # 切行更友好（可选）
             for i in range(0, len(seq), 80):
                 out.write(seq[i:i+80] + "\n")
 
 
 def revcomp(seq: str) -> str:
-    """DNA 反向互补（若需要）"""
+    """Reverse complement for DNA (if needed)."""
     table = str.maketrans("ACGTNacgtnUu", "TGCANtgcanTT")
     return seq.translate(table)[::-1]
 
 
 def normalize_dna(seq: str, u2t: bool = True, upper: bool = True) -> str:
-    """U->T（可选）并统一大小写"""
+    """Optionally convert U->T and unify case."""
     if u2t:
         seq = seq.replace('U', 'T').replace('u', 't')
     return seq.upper() if upper else seq
 
 
 # -------------------------
-#   组装函数（含 bug 修复）
+#   Assembly functions (with bug fixes)
 # -------------------------
 
 def generate_all_kmers(k: int, ignore_N: bool = True) -> "collections.OrderedDict[str,int]":
-    """
-    生成长度 k 的所有 k-mer 映射（字符串 -> 索引）。
-    """
+    """Generate mapping of all k-mers of length k to indices."""
     alphabet = "ACGT"
     if not ignore_N:
         alphabet += "N"
@@ -95,12 +91,12 @@ def generate_all_kmers(k: int, ignore_N: bool = True) -> "collections.OrderedDic
 
 def sequence_kmer_pileup(seq: str, query_kmers: List[str]):
     """
-    给定序列和查询 k-mer，返回“覆盖矩阵”：shape = (len(query_kmers), len(seq))
-    单元值表示该 k-mer 覆盖该碱基位置的次数（重叠会累计）。
-    需要 numpy；在 window 模式不会用到此函数。
+    Given a sequence and query k-mers, return coverage matrix with shape (len(query_kmers), len(seq)).
+    Each cell counts how many times the k-mer covers that base (overlaps accumulate).
+    Requires numpy; not used in window mode.
     """
     if np is None:
-        raise RuntimeError("sequence_kmer_pileup 需要 numpy，请安装 numpy 或改用 --mode window（默认）。")
+        raise RuntimeError("sequence_kmer_pileup requires numpy; install numpy or use --mode window (default).")
     assert isinstance(query_kmers, list)
     lengths = set(len(k) for k in query_kmers)
     retval = np.zeros((len(query_kmers), len(seq)), dtype=int)
@@ -110,7 +106,7 @@ def sequence_kmer_pileup(seq: str, query_kmers: List[str]):
         kmer_to_idx = generate_all_kmers(length)
         kmers_int = np.array([kmer_to_idx[k] for k in kmers if "N" not in k], dtype=int)
         query_int = np.atleast_2d(np.array([kmer_to_idx[k] for k in query_kmers if len(k) == length and "N" not in k], dtype=int)).T
-        hits = np.where(query_int == kmers_int)  # 自动广播
+        hits = np.where(query_int == kmers_int)  # broadcasting
         this_rows = np.zeros((len(query_int), len(seq)))
         for i in range(length):
             this_rows[hits[0], hits[1] + i] += 1
@@ -121,8 +117,8 @@ def sequence_kmer_pileup(seq: str, query_kmers: List[str]):
 
 def connect_nearby_runs(pileup_flat, allowed_gap_num: int):
     """
-    把两段 1-run 之间长度<=allowed_gap_num 的 0 段填成 1，实现连接。
-    支持 list/np.array。
+    Fill zero runs of length <= allowed_gap_num between ones to connect nearby runs.
+    Accepts list or np.array.
     """
     arr = list(pileup_flat)
     chunked = [(k, list(g)) for k, g in itertools.groupby(arr)]
@@ -139,15 +135,15 @@ def connect_nearby_runs(pileup_flat, allowed_gap_num: int):
 
 def find_long_runs(num_sequence: Iterable[int], l: int) -> List[Tuple[int, int]]:
     """
-    返回所有“连续 1-run 且长度 > l”的 (start, length)（碱基级坐标）
+    Return all continuous runs of 1 with length > l as (start, length) using base-level coordinates.
 
-    ===== 修复点（Bug #1）=====
-    旧逻辑返回的是“run 的块序号”，不是“碱基起点”，会导致后续 seq[i:i+l] 起点错误。
-    下面给出【修正版】并保留【原版（BUGGY）】为注释，方便快速切换。
+    Fix (Bug #1):
+    The old logic returned run block indices instead of base positions, causing wrong slice start.
+    Below is the corrected version; the original buggy version is retained as comment.
     """
-    # ---------- 【修正版：返回碱基级 (start, length)】 ----------
+    # ---------- Corrected: return base-level (start, length) ----------
     retval = []
-    pos = 0  # 当前遍历到的碱基位置
+    pos = 0  # current base position
     for val, group in itertools.groupby(num_sequence):
         g = list(group)
         length = len(g)
@@ -156,7 +152,7 @@ def find_long_runs(num_sequence: Iterable[int], l: int) -> List[Tuple[int, int]]
         pos += length
     return retval
 
-    # ---------- 【原版（BUGGY）：返回 run 的块序号】 ----------
+    # ---------- Original (BUGGY): returned run block indices ----------
     # chunked = [(k, list(g)) for k, g in itertools.groupby(num_sequence)]
     # retval = [(i, len(g)) for i, (k, g) in enumerate(chunked) if k and len(g) > l]
     # return retval
@@ -164,40 +160,39 @@ def find_long_runs(num_sequence: Iterable[int], l: int) -> List[Tuple[int, int]]
 
 def assemble_kmer_motifs_by_coverage(seq: str, kmers: List[str], min_len: int = 10, gap_allowed: int = 2) -> List[str]:
     """
-    利用覆盖矩阵→连通→长 run 的思路，从一条序列中输出长度>=min_len 的候选片段。
-    这是 RNAlight 思路的“覆盖拼接模式”，与 window 模式互补。
+    Using pileup->connect->long-run idea to output fragments with length >= min_len from a sequence.
+    This is the 'coverage' assembly mode complementary to the window mode.
     """
     if np is None:
-        raise RuntimeError("assemble_kmer_motifs_by_coverage 需要 numpy，请安装 numpy 或改用 --mode window。")
+        raise RuntimeError("assemble_kmer_motifs_by_coverage requires numpy; install numpy or use --mode window.")
     try:
         pileup = sequence_kmer_pileup(seq, kmers)
     except AssertionError:
         return []
-    pileup_flat = (pileup.sum(axis=0) > 0).astype(int)  # 是否被任意 k-mer 覆盖的 0/1 串
+    pileup_flat = (pileup.sum(axis=0) > 0).astype(int)
     pileup_flat = connect_nearby_runs(pileup_flat, gap_allowed)
     motif_spans = find_long_runs(pileup_flat, l=min_len)
     ret = [seq[start:start+length] for (start, length) in motif_spans]
-    # 保守断言
+    # sanity check
     assert all(len(s) == length for s, (_, length) in zip(ret, motif_spans))
     return ret
 
 
-# ====== MSA 辅助：从 MSA 提 motif（含 Bug #2 修正） ======
+# MSA helper: extract motifs from MSA (with Bug #2 fix)
 
 def _fetch_kmer_from_msa_i(i: int, seed_seq: str, msa: List[str], min_len: int, min_reps: int) -> str:
     """
-    给定 MSA 的起点 i 和长度为 min_len 的 seed_seq，尝试在不含 gap 且有 >=min_reps 条序列一致的前提下尽可能向右延伸。
-    返回延伸后的最大一致片段。
+    Given MSA start i and seed_seq of length min_len, try to extend to the right as far as possible
+    under the constraint of no gaps and at least min_reps sequences agreeing.
+    Return the maximal consistent extension.
 
-    ===== 修复点（Bug #2）=====
-    旧逻辑 sorted(...)[0] 会拿到“最短/支持少”的片段，违背“尽量延伸”的意图。
-    这里改为按 (长度, 支持数) 选最大。
+    Fix (Bug #2):
+    The old logic used sorted(...)[0] which could pick the shortest/least-supported fragment,
+    contrary to the goal of maximal extension. Now choose by (length, support).
     """
-    # 筛出相关序列并去掉 i 之前的前缀
     relevant_seqs = [m[i:] for m in msa if m[i:i+min_len] == seed_seq]
     if not relevant_seqs:
         return seed_seq
-    # 尝试所有满足 min_reps 的组合，逐列比较一致性，累积最远一致长度
     extended: List[str] = []
     for combo in itertools.combinations(relevant_seqs, min_reps):
         this_seq: List[str] = []
@@ -211,14 +206,14 @@ def _fetch_kmer_from_msa_i(i: int, seed_seq: str, msa: List[str], min_len: int, 
     if not extended:
         return seed_seq
 
-    # ---------- 【修正版：选择“最长、且支持数最多”的延伸】 ----------
+    # ---------- Choose the extension with maximal length and highest support ----------
     def score(s: str) -> Tuple[int, int]:
         support = sum(1 for m in relevant_seqs if s in m)
         return (len(s), support)
     best = max(extended, key=score)
     return best
 
-    # ---------- 【原版（BUGGY）：会选到最短】 ----------
+    # ---------- Original (BUGGY): could pick the shortest ----------
     # extended_properties = [(len(s), len([m for m in relevant_seqs if s in m])) for s in extended]
     # extended_sorted = [seq for _prop, seq in sorted(zip(extended_properties, extended))]
     # return extended_sorted[0]
@@ -226,7 +221,8 @@ def _fetch_kmer_from_msa_i(i: int, seed_seq: str, msa: List[str], min_len: int, 
 
 def find_motifs_in_msa(msa: List[str], min_len: int = 7, min_reps: int = 3) -> List[str]:
     """
-    在 MSA 上用长度为 min_len 的窗口找“至少有 min_reps 条序列一致且无 gap”的种子，再调用 _fetch_kmer_from_msa_i 延伸，并去掉被包含的短序列。
+    Scan an MSA for seeds of length min_len that appear in at least min_reps sequences without gaps,
+    extend them via _fetch_kmer_from_msa_i, and remove sequences contained within longer ones.
     """
     unique_lens = set(len(m) for m in msa)
     assert len(unique_lens) == 1, "All MSA sequences must be of the same length"
@@ -245,7 +241,7 @@ def find_motifs_in_msa(msa: List[str], min_len: int = 7, min_reps: int = 3) -> L
 
     hits_extended = [_fetch_kmer_from_msa_i(i, kmer, msa=msa, min_len=min_len, min_reps=min_reps)
                      for (i, kmer) in hits]
-    # 去除被包含的短序列
+    # remove contained shorter sequences
     hits_extended.sort(key=len, reverse=True)
     dedup: List[str] = []
     for h in hits_extended:
@@ -256,7 +252,7 @@ def find_motifs_in_msa(msa: List[str], min_len: int = 7, min_reps: int = 3) -> L
 
 
 # -------------------------
-#     片段生成两种模式
+#     Two fragment generation modes
 # -------------------------
 
 def windows_around_kmer_hits(
@@ -268,19 +264,20 @@ def windows_around_kmer_hits(
     dedup: bool = True
 ) -> List[Tuple[str, str]]:
     """
-    “窗口模式”：在每条 circRNA 里查找每个 k-mer 的命中，围绕命中 k-mer 的“中心”截取窗口（默认 ±10 nt）。
-    - even 长度 k-mer 的“中心”取左中位（floor）。
-    - near-end 的窗口若越界：pad_with_N=True 则补 N；否则截短（MEME 可接受不同长度）。
+    Window mode: search each circRNA for each k-mer; take a window around the k-mer 'center' (default ±flank).
+    - For even-length k-mers, the center is the left-middle (floor).
+    - If window exceeds sequence ends: pad_with_N=True will pad with N; otherwise the window is truncated
+      (MEME accepts variable-length sequences).
     """
     out: List[Tuple[str, str]] = []
     seen: Set[str] = set()
     rc_cache: Dict[str, str] = {}
     for sid, seq in circ_records:
         L = len(seq)
-        seq_upper = seq  # 已在上游 normalize
+        seq_upper = seq  # normalized upstream
         for k in kmers:
             klen = len(k)
-            # 正向
+            # forward strand
             start = 0
             while True:
                 idx = seq_upper.find(k, start)
@@ -288,7 +285,7 @@ def windows_around_kmer_hits(
                     break
                 center = idx + (klen // 2)
                 left = center - flank
-                right = center + flank + 1  # 包含中心 => 长度=2*flank+1
+                right = center + flank + 1  # inclusive center => length = 2*flank+1
                 if left < 0 or right > L:
                     if pad_with_N:
                         lpad = max(0, -left)
@@ -304,9 +301,9 @@ def windows_around_kmer_hits(
                     out.append((header, sub))
                     if dedup:
                         seen.add(sub)
-                start = idx + 1  # 允许重叠命中
+                start = idx + 1  # allow overlapping matches
 
-            # 反向互补（可选）
+            # reverse complement (optional)
             if both_strands:
                 if k in rc_cache:
                     k_rc = rc_cache[k]
@@ -348,7 +345,8 @@ def coverage_assembled_fragments(
     dedup: bool = True
 ) -> List[Tuple[str, str]]:
     """
-    “覆盖模式”：对每条 circRNA，使用 assemble_kmer_motifs_by_coverage 把相邻命中（允许 gap）连成更长片段。
+    Coverage mode: for each circRNA use assemble_kmer_motifs_by_coverage to connect nearby matches
+    (allowing gaps) into longer fragments.
     """
     out: List[Tuple[str, str]] = []
     seen: Set[str] = set()
@@ -364,63 +362,57 @@ def coverage_assembled_fragments(
 
 
 # -------------------------
-#           主流程
+#           Main
 # -------------------------
 
 def main():
     p = argparse.ArgumentParser(
-        description="基于 k-mer 生成可用于 MEME 的片段（默认：k-mer 中心 ±flank）。提供可选覆盖拼接模式；MSA 步骤已写好但默认注释。"
+        description="Generate fragments for MEME from k-mers (default: windows centered on k-mer ±flank). Coverage mode available."
     )
-    p.add_argument("--kmers", required=True, help="k-mer FASTA 文件（EV/Cyto 均可）")
-    p.add_argument("--circ",  required=True, help="circRNA FASTA 文件（EV/Cyto 均可）")
-    p.add_argument("--out",   required=True, help="输出 FASTA（可直接用于 MEME）")
+    p.add_argument("--kmers", required=True, help="k-mer FASTA file (EV/Cyto)")
+    p.add_argument("--circ",  required=True, help="circRNA FASTA file (EV/Cyto)")
+    p.add_argument("--out",   required=True, help="Output FASTA (suitable for MEME)")
 
-    # 窗口模式参数
-    p.add_argument("--flank", type=int, default=10, help="窗口模式：k-mer 中心两侧碱基数（默认 10，对应 ±10nt）")
-    p.add_argument("--both_strands", action="store_true", help="也在反向互补上搜（默认否）")
-    p.add_argument("--pad_with_N", action="store_true", help="越界时用 N 补齐固定长度窗口（默认截短即可）")
+    # window mode parameters
+    p.add_argument("--flank", type=int, default=10, help="Window flank size on each side of k-mer center (default 10)")
+    p.add_argument("--both_strands", action="store_true", help="Also search the reverse complement (default: off)")
+    p.add_argument("--pad_with_N", action="store_true", help="Pad out-of-bounds windows with N (default: truncate)")
 
-    # 覆盖模式参数
-    p.add_argument("--mode", choices=["window", "coverage"], default="window", help="片段生成模式（默认 window）")
-    p.add_argument("--min_len", type=int, default=10, help="coverage 模式：最短拼接长度（默认 10）")
-    p.add_argument("--gap_allowed", type=int, default=2, help="coverage 模式：允许连通的 0-gap 最大长度（默认 2）")
+    # coverage mode parameters
+    p.add_argument("--mode", choices=["window", "coverage"], default="window", help="Fragment generation mode (default: window)")
+    p.add_argument("--min_len", type=int, default=10, help="Coverage mode: minimum fragment length (default 10)")
+    p.add_argument("--gap_allowed", type=int, default=2, help="Coverage mode: max allowed zero-gap to connect runs (default 2)")
 
-    # 通用
-    p.add_argument("--dedup", action="store_true", help="去重（相同序列只保留一次）")
-    p.add_argument("--keep_case", action="store_true", help="保留大小写（默认转大写）")
-    p.add_argument("--keep_u", action="store_true", help="保留 U（默认 U->T）")
+    # common
+    p.add_argument("--dedup", action="store_true", help="Deduplicate identical sequences (keep one)")
+    p.add_argument("--keep_case", action="store_true", help="Preserve case (default: convert to uppercase)")
+    p.add_argument("--keep_u", action="store_true", help="Keep U (default: convert U->T)")
 
     args = p.parse_args()
 
-    # 读取并规范化 k-mers
+    # Read and normalize k-mers
     kmers: List[str] = []
-    # for kid, kseq in read_fasta(args.kmers):
-    #     k = normalize_dna(kseq, u2t=(not args.keep_u), upper=(not args.keep_case))
-    #     if "N" in k:
-    #         # N 会导致匹配不明确：这里直接跳过，也可改成用正则/模糊匹配
-    #         continue
-    #     kmers.append(k)
     for kid, kseq in read_fasta(args.kmers):
         k = normalize_dna(kseq, u2t=(not args.keep_u), upper=(not args.keep_case))
         if "N" in k:
             continue
         if any(base not in "ACGT" for base in k):
-            continue  # 跳过非 ACGT k-mer
+            continue  # skip non-ACGT k-mers
         kmers.append(k)
     if not kmers:
-        print("ERROR: 未读取到有效 k-mer（可能都含 N）。", file=sys.stderr)
+        print("ERROR: No valid k-mers read (they may all contain N).", file=sys.stderr)
         sys.exit(1)
 
-    # 读取并规范化 circRNA
+    # Read and normalize circRNA sequences
     circ_records = []
     for sid, s in read_fasta(args.circ):
         seq = normalize_dna(s, u2t=(not args.keep_u), upper=(not args.keep_case))
         circ_records.append((sid, seq))
     if not circ_records:
-        print("ERROR: 未读取到 circRNA 序列。", file=sys.stderr)
+        print("ERROR: No circRNA sequences read.", file=sys.stderr)
         sys.exit(1)
 
-    # 生成片段
+    # Generate fragments
     if args.mode == "window":
         frags = windows_around_kmer_hits(
             circ_records, kmers,
@@ -438,11 +430,11 @@ def main():
         )
 
     if not frags:
-        print("WARNING: 未生成任何片段。请检查 k-mer 与序列是否匹配、或放宽参数。", file=sys.stderr)
+        print("WARNING: No fragments were generated. Check k-mers vs sequences or relax parameters.", file=sys.stderr)
 
-    # 写出 FASTA
+    # Write FASTA
     write_fasta(frags, args.out)
-    print(f"[OK] 片段已写出：{args.out}（{len(frags)} 条）")
+    print(f"[OK] Fragments written: {args.out} ({len(frags)} entries)")
 
 
 if __name__ == "__main__":

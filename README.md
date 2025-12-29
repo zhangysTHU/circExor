@@ -38,7 +38,8 @@ This project's dependencies are managed with Conda.
     conda install -n your_env_name ipykernel
     ````
 #### To Do List
-- Gradually modify absolute paths to relative paths
+- [x] Gradually modify absolute paths to relative paths
+- [x] Update English version annotations
 - Snakemake or directly callable packaged interface
 
 ## License

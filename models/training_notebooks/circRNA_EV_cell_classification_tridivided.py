@@ -41,33 +41,33 @@ def ligate_sequence(seq, add_len):
 def balance_dataset_by_tag(df, tag_column='tag', random_state=42):
     """
     df : pd.DataFrame
-        需要处理的原始数据集。
-    tag_column : str, 默认 'tag'
-        用于分割数据的列名，默认是 'tag'。
-    random_state : int, 默认 42
-    返回:
+        Original dataset to process.
+    tag_column : str, default 'tag'
+        Column name used to split the dataset, default is 'tag'.
+    random_state : int, default 42
+    Returns:
     pd.DataFrame
-        平衡后的数据集，tag列为0和1的行数一致。
+        Balanced dataset with equal counts for tag 0 and tag 1.
     """
-    # 分割数据集为 tag=0 和 tag=1 的两部分
+    # Split dataset into tag=0 and tag=1 parts
     df_tag_0 = df[df[tag_column] == 0]
     df_tag_1 = df[df[tag_column] == 1]
 
-    # 判断哪个数据集较大，然后对较大的数据集进行下采样
+    # Downsample the larger dataset
     if len(df_tag_0) > len(df_tag_1):
         df_tag_0_downsampled = resample(df_tag_0, 
-                                        replace=False,  # 不允许重复采样
-                                        n_samples=len(df_tag_1),  # 调整为与tag=1一致
-                                        random_state=random_state)  # 设置随机种子
+                                        replace=False,  # No replacement
+                                        n_samples=len(df_tag_1),  # Match tag=1 count
+                                        random_state=random_state)  # Random seed
         df_balanced = pd.concat([df_tag_0_downsampled, df_tag_1])
     else:
         df_tag_1_downsampled = resample(df_tag_1, 
-                                        replace=False,  # 不允许重复采样
-                                        n_samples=len(df_tag_0),  # 调整为与tag=0一致
-                                        random_state=random_state)  # 设置随机种子
+                                        replace=False,  # No replacement
+                                        n_samples=len(df_tag_0),  # Match tag=0 count
+                                        random_state=random_state)  # Random seed
         df_balanced = pd.concat([df_tag_0, df_tag_1_downsampled])
 
-    # 打乱数据集的顺序
+    # Shuffle the balanced dataset
     df_balanced = df_balanced.sample(frac=1, random_state=random_state).reset_index(drop=True)
 
     return df_balanced
@@ -189,15 +189,14 @@ def plot_AUROC(model_perf,path):
 # %%
 def logistic_regression_classification(x_train, y_train, x_test, y_test, output_dir, SEED=42):
     """
-    执行Logistic Regression二分类任务，包含超参数调优、训练、评估和结果保存。
+    Run Logistic Regression binary classification including hyperparameter search,
+    training, evaluation and saving results.
 
-    参数：
-    x_train : 训练集特征
-    y_train : 训练集标签
-    x_test : 测试集特征
-    y_test : 测试集标签
-    output_dir : 输出目录路径
-    SEED : 随机种子，默认为42
+    Parameters:
+    x_train, y_train : training features and labels
+    x_test, y_test   : testing features and labels
+    output_dir       : directory to save outputs
+    SEED             : random seed (default 42)
     """
     print("\n*** Logistic Regression  ***")
 
@@ -537,38 +536,39 @@ np.random.seed(SEED)
 
 warnings.filterwarnings(action='ignore')
 
-# Output dir
+# Output directory for model outputs
 output_dir = "./ML_python_scripts/ML_models/circRNA_ML_Model_tridivided_Output"
 if not (os.path.exists(output_dir)):
     os.mkdir(output_dir)
 
 # %%
-# 先划分数据集后计算
+# Split dataset then compute features
 dataset = pd.read_csv(
     './ML_python_scripts/reference_preprocessing/circRNA/output_with_sequences.csv',
     sep='\t',
     index_col=False
 )
 dataset_filtered = dataset
-# 将circRNA序列首尾拼接保证kmer的环形分析
+
+# Concatenate circRNA sequence ends to preserve circular k-mer analysis
 add_len = 4 
 dataset_filtered["Sequence"] = dataset_filtered["Sequence"].apply(
     lambda x: ligate_sequence(x, add_len)
 )
 
-
+# Balance dataset by tag
 dataset_filtered = balance_dataset_by_tag(dataset_filtered, tag_column='tag', random_state=42)
 
-# 3. 划分训练集、验证集和测试集（6:2:2）
+# 3. Split into train/val/test (6:2:2)
 train_df, temp_df = train_test_split(dataset_filtered, test_size=0.4, random_state=SEED, stratify=dataset_filtered['tag'])
 val_df, test_df = train_test_split(temp_df, test_size=0.5, random_state=SEED, stratify=temp_df['tag'])
 
-# 4. 分别提取训练集、验证集和测试集的 k-mer 特征
+# 4. Extract k-mer features for train/val/test
 df_kmer_train, df_kmer_train_raw = _count_kmer(train_df, 345)
 df_kmer_val, df_kmer_val_raw = _count_kmer(val_df, 345)
 df_kmer_test, df_kmer_test_raw = _count_kmer(test_df, 345)
 
-# 保存特征
+# Save feature tables
 df_kmer_train.to_csv(os.path.join(output_dir, "train_kmer345_freq.tsv"), sep='\t')
 df_kmer_train_raw.to_csv(os.path.join(output_dir, "train_kmer345_rawcount.tsv"), sep='\t')
 df_kmer_val.to_csv(os.path.join(output_dir, "val_kmer345_freq.tsv"), sep='\t')
@@ -582,18 +582,18 @@ from Bio.SeqRecord import SeqRecord
 from Bio.Seq import Seq
 from Bio import SeqIO
 
-# 构建 SeqRecord 列表
+# Build SeqRecord list for the test set
 fasta_records = [
     SeqRecord(Seq(row["Sequence"]), id=row["RNA_Symbol"], description=row["Subcellular_Localization"])
     for _, row in test_df.iterrows()
 ]
 
-# 保存为 fasta 文件
+# Save test sequences to a FASTA file
 fasta_path = os.path.join(output_dir, "test_set_sequences.fasta")
 SeqIO.write(fasta_records, fasta_path, "fasta")
 
 # %%
-# 获取训练、验证和测试数据的特征矩阵 + 标签
+# Prepare feature matrices and labels for train/val/test
 x_train = df_kmer_train.drop(columns=["RNA_Symbol"]).values
 x_val = df_kmer_val.drop(columns=["RNA_Symbol"]).values
 x_test = df_kmer_test.drop(columns=["RNA_Symbol"]).values
@@ -602,24 +602,23 @@ y_train = train_df["tag"].values
 y_val = val_df["tag"].values
 y_test = test_df["tag"].values
 
-# 6. 缺失值处理
+# 6. Handle missing values
 imputer = SimpleImputer(strategy='mean')
 x_train = imputer.fit_transform(x_train)
 x_val = imputer.transform(x_val)
 x_test = imputer.transform(x_test)
 
 # %%
-# kmer = 345, model = LR
-#Construct Logistic Regression model
-LR_perf = logistic_regression_classification(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+# k-mer = 345, run model evaluations on validation set
+LR_perf = logistic_regression_classification(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 
-SVM_perf = SVM_classification(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+SVM_perf = SVM_classification(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 
-RF_perf = RF_classification(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+RF_perf = RF_classification(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 
-lightGBM_perf = lightGBM_classification(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+lightGBM_perf = lightGBM_classification(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 
-CatBoost_perf = catboost_classification_random_search(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+CatBoost_perf = catboost_classification_random_search(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 
-NGBoost_perf = ngboost_classification_random_search(x_test=x_val, x_train=x_train,y_test=y_val,y_train=y_train, output_dir=output_dir)
+NGBoost_perf = ngboost_classification_random_search(x_test=x_val, x_train=x_train, y_test=y_val, y_train=y_train, output_dir=output_dir)
 

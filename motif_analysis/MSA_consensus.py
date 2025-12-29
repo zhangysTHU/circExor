@@ -8,7 +8,7 @@ import collections
 import argparse
 import subprocess
 
-# ---------- 工具函数 ----------
+# ---------- Utility functions ----------
 def generate_all_kmers(k, ignore_N=True):
     alphabet = "ACGT"
     if not ignore_N:
@@ -115,52 +115,13 @@ def find_motifs_in_msa(msa, min_len=7, min_reps=3):
         hits_extended_dedup.append(hit)
     return hits_extended_dedup
 
-# def run_pipeline(input_fasta, output_dir, threads=8, min_len=7, min_reps=3):
-#     os.makedirs(output_dir, exist_ok=True)
-
-#     # Step 1: MSA
-#     cluster_file = os.path.join(output_dir, "msa.cluster")
-#     clustalo_cmd = [
-#         "clustalo",
-#         "--threads", str(threads),
-#         "-i", input_fasta,
-#         "-o", cluster_file,
-#         "--outfmt", "clu"
-#     ]
-#     subprocess.run(clustalo_cmd, check=True)
-
-#     # Step 2: MSA to motifs
-#     msa_dict = read_msa(cluster_file, combine_lines=True)
-#     msa_list = list(msa_dict.values())
-#     motifs = find_motifs_in_msa(msa_list, min_len=min_len, min_reps=min_reps)
-
-#     # 保存为FASTA
-#     fasta_file = os.path.join(output_dir, "motifs.fa")
-#     with open(fasta_file, "w") as f:
-#         for i, motif in enumerate(motifs, start=1):
-#             f.write(f">motif{i}\n{motif}\n")
-
-#     print(f"[OK] MSA saved to: {cluster_file}")
-#     print(f"[OK] Motifs saved to: {fasta_file}")
-    
-# if __name__ == "__main__":
-#     parser = argparse.ArgumentParser(description="FASTA -> MSA -> motifs pipeline")
-#     parser.add_argument("-i", "--input", required=True, help="Input FASTA file")
-#     parser.add_argument("-o", "--output", required=True, help="Output directory")
-#     parser.add_argument("--threads", type=int, default=8, help="Number of threads for Clustal Omega")
-#     parser.add_argument("--min_len", type=int, default=7, help="Minimum motif length")
-#     parser.add_argument("--min_reps", type=int, default=3, help="Minimum repetitions in MSA")
-#     args = parser.parse_args()
-
-#     run_pipeline(args.input, args.output, args.threads, args.min_len, args.min_reps)
-
 def run_pipeline(input_fasta, output_dir, threads=8, min_len=7, min_reps=3, force=False):
     os.makedirs(output_dir, exist_ok=True)
 
-    # Step 1: MSA
+    # Step 1: multiple sequence alignment (MSA)
     cluster_file = os.path.join(output_dir, "msa.cluster")
     
-    # 检查文件是否存在，如果存在且未使用force参数则报错
+    # If cluster file exists and force is not set, refuse to overwrite
     if os.path.exists(cluster_file) and not force:
         raise FileExistsError(f"FATAL: Cowardly refusing to overwrite already existing file '{cluster_file}'. Use --force to force overwriting.")
     
@@ -170,18 +131,18 @@ def run_pipeline(input_fasta, output_dir, threads=8, min_len=7, min_reps=3, forc
         "-i", input_fasta,
         "-o", cluster_file,
         "--outfmt", "clu",
-        "--force"  # 添加clustalo的force参数
+        "--force"
     ]
     subprocess.run(clustalo_cmd, check=True)
 
-    # Step 2: MSA to motifs
+    # Step 2: convert MSA to motifs
     msa_dict = read_msa(cluster_file, combine_lines=True)
     msa_list = list(msa_dict.values())
     motifs = find_motifs_in_msa(msa_list, min_len=min_len, min_reps=min_reps)
 
-    # 保存为FASTA
+    # Save motifs as FASTA
     fasta_file = os.path.join(output_dir, "motifs.fa")
-    # 检查文件是否存在，如果存在且未使用force参数则报错
+    # If output FASTA exists and force is not set, refuse to overwrite
     if os.path.exists(fasta_file) and not force:
         raise FileExistsError(f"FATAL: Cowardly refusing to overwrite already existing file '{fasta_file}'. Use --force to force overwriting.")
     
