@@ -11,12 +11,11 @@ This repository provides all training and evaluation code for the circExoer proj
 
 1.  `/SHAP/`: Stores scripts and results for SHAPley value calculation and visualization of machine learning results
 2.  `/_plot/`: Contains images used in markdown documentation
-3.  `/models/`: Code for building and training machine learning models, as well as saved machine learning results and outputs
+3.  `/models/`: Code for building and training machine learning models&deep learning models, as well as saved machine learning results and outputs. Model training related analysis such as Ablation analysis stored here as well
 4.  `/resources/`: Initially screened circRNA localization information from the locate database
 5.  `/sample_preprocessings/`: Scripts for preprocessing resources in `/resources/` and human genome fasta files
-6.  `/references/`: circRNA fasta files obtained from public databases
-7.  `/benchmark_evaluation/`: Comparison of circExor with other published models on baseline
-8.  `/motif_analysis/`: Scripts and results related to RBP finding
+6.  `/benchmark_evaluation/`: Comparison of circExor with other published models on baseline
+7.  `/motif_analysis/`: Scripts and results related to RBP finding and motif enrichment analysis
 
 #### Environment Setup
 

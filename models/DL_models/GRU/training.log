@@ -1,0 +1,142 @@
+nohup: ignoring input
+Train shapes - X: torch.Size([1098, 4, 1500]), y: torch.Size([1098])
+Val shapes   - X: torch.Size([366, 4, 1500]), y: torch.Size([366])
+Using device: cpu
+
+--- Starting 5-Fold Cross Validation on Training Set ---
+
+--- Fold 1 ---
+Epoch [1/15] - Train Loss: 0.7404 | Val Loss: 0.6970 | Val Acc: 0.5045 | Val AUC: 0.4906
+Epoch [2/15] - Train Loss: 0.6934 | Val Loss: 0.6973 | Val Acc: 0.5000 | Val AUC: 0.4887
+Epoch [3/15] - Train Loss: 0.6813 | Val Loss: 0.6970 | Val Acc: 0.5227 | Val AUC: 0.5228
+Epoch [4/15] - Train Loss: 0.6865 | Val Loss: 0.7009 | Val Acc: 0.5273 | Val AUC: 0.5050
+Epoch [5/15] - Train Loss: 0.6701 | Val Loss: 0.7078 | Val Acc: 0.5318 | Val AUC: 0.5284
+Epoch [6/15] - Train Loss: 0.6660 | Val Loss: 0.6934 | Val Acc: 0.5273 | Val AUC: 0.5628
+Epoch [7/15] - Train Loss: 0.6514 | Val Loss: 0.7180 | Val Acc: 0.5591 | Val AUC: 0.5520
+Epoch [8/15] - Train Loss: 0.6356 | Val Loss: 0.7198 | Val Acc: 0.5182 | Val AUC: 0.5448
+Epoch [9/15] - Train Loss: 0.6373 | Val Loss: 0.6975 | Val Acc: 0.5818 | Val AUC: 0.6113
+Epoch [10/15] - Train Loss: 0.6277 | Val Loss: 0.7611 | Val Acc: 0.5182 | Val AUC: 0.5535
+Epoch [11/15] - Train Loss: 0.6220 | Val Loss: 0.7055 | Val Acc: 0.6000 | Val AUC: 0.5889
+Epoch [12/15] - Train Loss: 0.5919 | Val Loss: 0.7177 | Val Acc: 0.5409 | Val AUC: 0.5891
+Epoch [13/15] - Train Loss: 0.6137 | Val Loss: 0.7246 | Val Acc: 0.5636 | Val AUC: 0.5843
+Epoch [14/15] - Train Loss: 0.6311 | Val Loss: 0.7921 | Val Acc: 0.4864 | Val AUC: 0.5378
+Epoch [15/15] - Train Loss: 0.6151 | Val Loss: 0.7691 | Val Acc: 0.5500 | Val AUC: 0.5517
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_1/Evaluate_Result.txt
+
+--- Fold 2 ---
+Epoch [1/15] - Train Loss: 0.7623 | Val Loss: 0.6921 | Val Acc: 0.5364 | Val AUC: 0.4692
+Epoch [2/15] - Train Loss: 0.6990 | Val Loss: 0.6977 | Val Acc: 0.5318 | Val AUC: 0.4042
+Epoch [3/15] - Train Loss: 0.6856 | Val Loss: 0.6951 | Val Acc: 0.5182 | Val AUC: 0.5054
+Epoch [4/15] - Train Loss: 0.6744 | Val Loss: 0.7369 | Val Acc: 0.4591 | Val AUC: 0.4837
+Epoch [5/15] - Train Loss: 0.6526 | Val Loss: 0.7096 | Val Acc: 0.5364 | Val AUC: 0.5278
+Epoch [6/15] - Train Loss: 0.6307 | Val Loss: 0.7292 | Val Acc: 0.5455 | Val AUC: 0.5388
+Epoch [7/15] - Train Loss: 0.6386 | Val Loss: 0.7823 | Val Acc: 0.4136 | Val AUC: 0.4298
+Epoch [8/15] - Train Loss: 0.6475 | Val Loss: 0.7716 | Val Acc: 0.5182 | Val AUC: 0.5253
+Epoch [9/15] - Train Loss: 0.6369 | Val Loss: 0.7763 | Val Acc: 0.4727 | Val AUC: 0.4746
+Epoch [10/15] - Train Loss: 0.6143 | Val Loss: 0.7696 | Val Acc: 0.4591 | Val AUC: 0.5069
+Epoch [11/15] - Train Loss: 0.6037 | Val Loss: 0.7617 | Val Acc: 0.5273 | Val AUC: 0.5162
+Epoch [12/15] - Train Loss: 0.6000 | Val Loss: 0.7122 | Val Acc: 0.5500 | Val AUC: 0.5809
+Epoch [13/15] - Train Loss: 0.5942 | Val Loss: 0.7569 | Val Acc: 0.5318 | Val AUC: 0.5410
+Epoch [14/15] - Train Loss: 0.6045 | Val Loss: 0.7097 | Val Acc: 0.5500 | Val AUC: 0.5703
+Epoch [15/15] - Train Loss: 0.5823 | Val Loss: 0.7264 | Val Acc: 0.5636 | Val AUC: 0.5877
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_2/Evaluate_Result.txt
+
+--- Fold 3 ---
+Epoch [1/15] - Train Loss: 0.7484 | Val Loss: 0.6909 | Val Acc: 0.5591 | Val AUC: 0.4859
+Epoch [2/15] - Train Loss: 0.6940 | Val Loss: 0.6881 | Val Acc: 0.5591 | Val AUC: 0.5274
+Epoch [3/15] - Train Loss: 0.6725 | Val Loss: 0.6915 | Val Acc: 0.5318 | Val AUC: 0.5106
+Epoch [4/15] - Train Loss: 0.6692 | Val Loss: 0.7092 | Val Acc: 0.5227 | Val AUC: 0.4966
+Epoch [5/15] - Train Loss: 0.6658 | Val Loss: 0.7097 | Val Acc: 0.5182 | Val AUC: 0.5576
+Epoch [6/15] - Train Loss: 0.6679 | Val Loss: 0.7205 | Val Acc: 0.5182 | Val AUC: 0.4951
+Epoch [7/15] - Train Loss: 0.6485 | Val Loss: 0.7192 | Val Acc: 0.5455 | Val AUC: 0.5549
+Epoch [8/15] - Train Loss: 0.6245 | Val Loss: 0.7146 | Val Acc: 0.5591 | Val AUC: 0.5712
+Epoch [9/15] - Train Loss: 0.6262 | Val Loss: 0.7459 | Val Acc: 0.5136 | Val AUC: 0.5493
+Epoch [10/15] - Train Loss: 0.6218 | Val Loss: 0.7423 | Val Acc: 0.4864 | Val AUC: 0.5270
+Epoch [11/15] - Train Loss: 0.6312 | Val Loss: 0.7480 | Val Acc: 0.5545 | Val AUC: 0.5581
+Epoch [12/15] - Train Loss: 0.6099 | Val Loss: 0.7331 | Val Acc: 0.5227 | Val AUC: 0.5603
+Epoch [13/15] - Train Loss: 0.5893 | Val Loss: 0.7561 | Val Acc: 0.5545 | Val AUC: 0.5604
+Epoch [14/15] - Train Loss: 0.5917 | Val Loss: 0.7693 | Val Acc: 0.5682 | Val AUC: 0.5516
+Epoch [15/15] - Train Loss: 0.5817 | Val Loss: 0.8335 | Val Acc: 0.4636 | Val AUC: 0.5500
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_3/Evaluate_Result.txt
+
+--- Fold 4 ---
+Epoch [1/15] - Train Loss: 0.7373 | Val Loss: 0.6993 | Val Acc: 0.4703 | Val AUC: 0.5895
+Epoch [2/15] - Train Loss: 0.6862 | Val Loss: 0.7070 | Val Acc: 0.4658 | Val AUC: 0.5640
+Epoch [3/15] - Train Loss: 0.6698 | Val Loss: 0.6900 | Val Acc: 0.5297 | Val AUC: 0.5772
+Epoch [4/15] - Train Loss: 0.6528 | Val Loss: 0.6902 | Val Acc: 0.5251 | Val AUC: 0.5888
+Epoch [5/15] - Train Loss: 0.6587 | Val Loss: 0.6945 | Val Acc: 0.5525 | Val AUC: 0.5619
+Epoch [6/15] - Train Loss: 0.6521 | Val Loss: 0.7050 | Val Acc: 0.5479 | Val AUC: 0.5759
+Epoch [7/15] - Train Loss: 0.6346 | Val Loss: 0.6981 | Val Acc: 0.5799 | Val AUC: 0.5996
+Epoch [8/15] - Train Loss: 0.6171 | Val Loss: 0.7192 | Val Acc: 0.5479 | Val AUC: 0.5751
+Epoch [9/15] - Train Loss: 0.6220 | Val Loss: 0.7226 | Val Acc: 0.5434 | Val AUC: 0.5752
+Epoch [10/15] - Train Loss: 0.6099 | Val Loss: 0.7600 | Val Acc: 0.5434 | Val AUC: 0.5451
+Epoch [11/15] - Train Loss: 0.6031 | Val Loss: 0.8192 | Val Acc: 0.4749 | Val AUC: 0.5102
+Epoch [12/15] - Train Loss: 0.6146 | Val Loss: 0.7722 | Val Acc: 0.4977 | Val AUC: 0.5626
+Epoch [13/15] - Train Loss: 0.6008 | Val Loss: 0.7479 | Val Acc: 0.5479 | Val AUC: 0.5779
+Epoch [14/15] - Train Loss: 0.6073 | Val Loss: 0.7379 | Val Acc: 0.5753 | Val AUC: 0.5990
+Epoch [15/15] - Train Loss: 0.6020 | Val Loss: 0.7422 | Val Acc: 0.5753 | Val AUC: 0.5865
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_4/Evaluate_Result.txt
+
+--- Fold 5 ---
+Epoch [1/15] - Train Loss: 0.7460 | Val Loss: 0.6917 | Val Acc: 0.5297 | Val AUC: 0.4887
+Epoch [2/15] - Train Loss: 0.6932 | Val Loss: 0.6891 | Val Acc: 0.5571 | Val AUC: 0.6000
+Epoch [3/15] - Train Loss: 0.6756 | Val Loss: 0.6864 | Val Acc: 0.5342 | Val AUC: 0.5434
+Epoch [4/15] - Train Loss: 0.6903 | Val Loss: 0.6857 | Val Acc: 0.5205 | Val AUC: 0.5605
+Epoch [5/15] - Train Loss: 0.6532 | Val Loss: 0.6904 | Val Acc: 0.5571 | Val AUC: 0.5657
+Epoch [6/15] - Train Loss: 0.6467 | Val Loss: 0.6985 | Val Acc: 0.4977 | Val AUC: 0.5456
+Epoch [7/15] - Train Loss: 0.6387 | Val Loss: 0.7129 | Val Acc: 0.4977 | Val AUC: 0.5247
+Epoch [8/15] - Train Loss: 0.6209 | Val Loss: 0.7061 | Val Acc: 0.5297 | Val AUC: 0.5571
+Epoch [9/15] - Train Loss: 0.6221 | Val Loss: 0.7438 | Val Acc: 0.5205 | Val AUC: 0.5442
+Epoch [10/15] - Train Loss: 0.6377 | Val Loss: 0.7174 | Val Acc: 0.5525 | Val AUC: 0.5738
+Epoch [11/15] - Train Loss: 0.6098 | Val Loss: 0.7197 | Val Acc: 0.5251 | Val AUC: 0.5601
+Epoch [12/15] - Train Loss: 0.6034 | Val Loss: 0.8525 | Val Acc: 0.5068 | Val AUC: 0.5313
+Epoch [13/15] - Train Loss: 0.6083 | Val Loss: 0.7950 | Val Acc: 0.4840 | Val AUC: 0.4759
+Epoch [14/15] - Train Loss: 0.5908 | Val Loss: 0.7426 | Val Acc: 0.5434 | Val AUC: 0.5752
+Epoch [15/15] - Train Loss: 0.5836 | Val Loss: 0.7761 | Val Acc: 0.4703 | Val AUC: 0.5668
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_5/Evaluate_Result.txt
+
+5-Fold CV metrics saved to: /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/circRNA_GRU_5fold_cv_metrics.csv
+
+--- 5-Fold Cross Validation Results ---
+Average AUROC: 0.5686 ± 0.0162
+If you are satisfied with the hyper-parameters, we will now train on FULL x_train data...
+
+--- Starting Final Training on FULL Training Set ---
+Epoch [1/20] - Train Loss: 0.7441 | Val Loss: 0.6942 | Val Acc: 0.5000 | Val AUC: 0.5524
+Epoch [2/20] - Train Loss: 0.6950 | Val Loss: 0.7046 | Val Acc: 0.5027 | Val AUC: 0.5347
+Epoch [3/20] - Train Loss: 0.6862 | Val Loss: 0.7000 | Val Acc: 0.5191 | Val AUC: 0.5496
+Epoch [4/20] - Train Loss: 0.6911 | Val Loss: 0.7038 | Val Acc: 0.5219 | Val AUC: 0.5425
+Epoch [5/20] - Train Loss: 0.6714 | Val Loss: 0.6913 | Val Acc: 0.5055 | Val AUC: 0.5446
+Epoch [6/20] - Train Loss: 0.6701 | Val Loss: 0.7146 | Val Acc: 0.5137 | Val AUC: 0.5394
+Epoch [7/20] - Train Loss: 0.6725 | Val Loss: 0.7134 | Val Acc: 0.5273 | Val AUC: 0.5332
+Epoch [8/20] - Train Loss: 0.6736 | Val Loss: 0.7098 | Val Acc: 0.5219 | Val AUC: 0.5437
+Epoch [9/20] - Train Loss: 0.6497 | Val Loss: 0.7214 | Val Acc: 0.5082 | Val AUC: 0.5294
+Epoch [10/20] - Train Loss: 0.6530 | Val Loss: 0.6993 | Val Acc: 0.5273 | Val AUC: 0.5522
+Epoch [11/20] - Train Loss: 0.6614 | Val Loss: 0.7152 | Val Acc: 0.5246 | Val AUC: 0.5555
+Epoch [12/20] - Train Loss: 0.6574 | Val Loss: 0.7920 | Val Acc: 0.5027 | Val AUC: 0.5080
+Epoch [13/20] - Train Loss: 0.6424 | Val Loss: 0.7810 | Val Acc: 0.4918 | Val AUC: 0.4963
+Epoch [14/20] - Train Loss: 0.6376 | Val Loss: 0.7013 | Val Acc: 0.5710 | Val AUC: 0.5633
+Epoch [15/20] - Train Loss: 0.6339 | Val Loss: 0.7308 | Val Acc: 0.5246 | Val AUC: 0.5561
+Epoch [16/20] - Train Loss: 0.6254 | Val Loss: 0.7168 | Val Acc: 0.5273 | Val AUC: 0.5430
+Epoch [17/20] - Train Loss: 0.6252 | Val Loss: 0.7006 | Val Acc: 0.5628 | Val AUC: 0.5743
+Epoch [18/20] - Train Loss: 0.6131 | Val Loss: 0.7816 | Val Acc: 0.4863 | Val AUC: 0.5064
+Epoch [19/20] - Train Loss: 0.6087 | Val Loss: 0.7436 | Val Acc: 0.5273 | Val AUC: 0.5538
+Epoch [20/20] - Train Loss: 0.5907 | Val Loss: 0.7590 | Val Acc: 0.5000 | Val AUC: 0.5191
+
+Training completed. Evaluating on validation set...
+Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Final_Model/Evaluate_Result.txt
+
+Validation Set Final Performance (Trained on Full Train Set):
+AUROC: 0.5191
+Accuracy: 0.5000
+F1 Score: 0.5094

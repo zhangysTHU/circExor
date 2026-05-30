@@ -1,0 +1,11 @@
+###### NOTE #######
+# In binary classification, recall of the positive class is also known as sensitivity; recall of the negative class is specificity #
+
+              precision    recall  f1-score   support
+
+     control       0.64      0.74      0.69       183
+        case       0.69      0.58      0.64       183
+
+    accuracy                           0.66       366
+   macro avg       0.67      0.66      0.66       366
+weighted avg       0.67      0.66      0.66       366

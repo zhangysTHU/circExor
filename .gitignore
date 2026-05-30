@@ -1,0 +1,12 @@
+# large model outputs
+models/kmer_num_analysis/kmer67_extra4fold_output/
+
+# large sequence-comparison outputs and temporary databases
+sample_preprocessing/circRNA_external_testset/sequence_camparison/outputs/
+
+# large generated sequence table
+sample_preprocessing/circRNA_loosed/output_with_sequences.csv
+
+# large resource files
+resources/circbank/*.gz
+resources/exoRase/EVPs_in_BRCA_circRNAs.txt
