@@ -23,7 +23,7 @@ Epoch [14/15] - Train Loss: 0.6311 | Val Loss: 0.7921 | Val Acc: 0.4864 | Val AU
 Epoch [15/15] - Train Loss: 0.6151 | Val Loss: 0.7691 | Val Acc: 0.5500 | Val AUC: 0.5517
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_1/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_1/Evaluate_Result.txt
 
 --- Fold 2 ---
 Epoch [1/15] - Train Loss: 0.7623 | Val Loss: 0.6921 | Val Acc: 0.5364 | Val AUC: 0.4692
@@ -43,7 +43,7 @@ Epoch [14/15] - Train Loss: 0.6045 | Val Loss: 0.7097 | Val Acc: 0.5500 | Val AU
 Epoch [15/15] - Train Loss: 0.5823 | Val Loss: 0.7264 | Val Acc: 0.5636 | Val AUC: 0.5877
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_2/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_2/Evaluate_Result.txt
 
 --- Fold 3 ---
 Epoch [1/15] - Train Loss: 0.7484 | Val Loss: 0.6909 | Val Acc: 0.5591 | Val AUC: 0.4859
@@ -63,7 +63,7 @@ Epoch [14/15] - Train Loss: 0.5917 | Val Loss: 0.7693 | Val Acc: 0.5682 | Val AU
 Epoch [15/15] - Train Loss: 0.5817 | Val Loss: 0.8335 | Val Acc: 0.4636 | Val AUC: 0.5500
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_3/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_3/Evaluate_Result.txt
 
 --- Fold 4 ---
 Epoch [1/15] - Train Loss: 0.7373 | Val Loss: 0.6993 | Val Acc: 0.4703 | Val AUC: 0.5895
@@ -83,7 +83,7 @@ Epoch [14/15] - Train Loss: 0.6073 | Val Loss: 0.7379 | Val Acc: 0.5753 | Val AU
 Epoch [15/15] - Train Loss: 0.6020 | Val Loss: 0.7422 | Val Acc: 0.5753 | Val AUC: 0.5865
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_4/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_4/Evaluate_Result.txt
 
 --- Fold 5 ---
 Epoch [1/15] - Train Loss: 0.7460 | Val Loss: 0.6917 | Val Acc: 0.5297 | Val AUC: 0.4887
@@ -103,9 +103,9 @@ Epoch [14/15] - Train Loss: 0.5908 | Val Loss: 0.7426 | Val Acc: 0.5434 | Val AU
 Epoch [15/15] - Train Loss: 0.5836 | Val Loss: 0.7761 | Val Acc: 0.4703 | Val AUC: 0.5668
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_5/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Fold_5/Evaluate_Result.txt
 
-5-Fold CV metrics saved to: /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/circRNA_GRU_5fold_cv_metrics.csv
+5-Fold CV metrics saved to: ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/circRNA_GRU_5fold_cv_metrics.csv
 
 --- 5-Fold Cross Validation Results ---
 Average AUROC: 0.5686 ± 0.0162
@@ -134,7 +134,7 @@ Epoch [19/20] - Train Loss: 0.6087 | Val Loss: 0.7436 | Val Acc: 0.5273 | Val AU
 Epoch [20/20] - Train Loss: 0.5907 | Val Loss: 0.7590 | Val Acc: 0.5000 | Val AUC: 0.5191
 
 Training completed. Evaluating on validation set...
-Evaluation results saved to /lulabdata3/huangkeyun/zhangys/RNA_locator/ML_python_scripts/DL_models/circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Final_Model/Evaluate_Result.txt
+Evaluation results saved to ../circRNA_DL_Model_tridivided_intra5fold_Output/GRU/GRU_Final_Model/Evaluate_Result.txt
 
 Validation Set Final Performance (Trained on Full Train Set):
 AUROC: 0.5191

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REF="circExor/ML_models/circRNA_ML_Model_tridivided_extra4fold_Output/train_val_set_sequences.fasta"
+REF="../../../models/ML_models/circRNA_ML_Model_tridivided_extra4fold_Output/train_val_set_sequences.fasta"
 TARGETS=("./outputs/target_exoRbase.fasta" "./outputs/target_celline.fasta")
 IDENTITY=0.9
 OUT_DIR="./outputs"

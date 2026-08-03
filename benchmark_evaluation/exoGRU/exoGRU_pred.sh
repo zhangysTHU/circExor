@@ -1,8 +1,8 @@
 #!/bin/bash
 
-PYTHON_EXEC="python"
-SCRIPT="circExor/repeated_works/exosomians/pred_EV_fasta.py"
-BOOTSTRAP_DIR="circExor/benchmark_evaluation/exoGRU/bootstrap_results"
+PYTHON_EXEC="${PYTHON_EXEC:-python}"
+SCRIPT="../exosomians/pred_EV_fasta.py"
+BOOTSTRAP_DIR="bootstrap_results"
 
 for i in {1..5}
 do

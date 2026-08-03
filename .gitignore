@@ -10,3 +10,14 @@ sample_preprocessing/circRNA_loosed/output_with_sequences.csv
 # large resource files
 resources/circbank/*.gz
 resources/exoRase/EVPs_in_BRCA_circRNAs.txt
+
+__pycache__/
+.ipynb_checkpoints/
+**/catboost_info/
+*.pkl
+*.pt
+*.pth
+motif_analysis/motif_databases/
+resources/exoRase/circRNAs_anno.csv
+resources/circAtlas/human_bed_v3.0.txt
+resources/RNAlocate/mRNA_location_resources.csv

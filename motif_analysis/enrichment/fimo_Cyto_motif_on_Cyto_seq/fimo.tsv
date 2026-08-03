@@ -1206,4 +1206,4 @@ M323_0.6	NOVA2	hsa_circ_0080913_Nucleus	912	924	+	9.53846	9.99e-05	0.853	GGAGAGT
 
 # FIMO (Find Individual Motif Occurrences): Version 5.4.1 compiled on Feb 24 2022 at 15:21:45
 # The format of this file is described at https://meme-suite.org/meme/doc/fimo-output-format.html.
-# fimo --oc fimo_Cyto_motif_on_Cyto_seq ./meme_files/Cyto_specific_motifs.meme /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/circRNA_ligated/Cyto_sequences.fasta
+# fimo --oc fimo_Cyto_motif_on_Cyto_seq ./meme_files/Cyto_specific_motifs.meme ../../circRNA_ligated/Cyto_sequences.fasta

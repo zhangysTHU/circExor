@@ -74,9 +74,9 @@ clusterid CDATA #IMPLIED
 >
 <program-name>fimo</program-name>
 <parameters>
-<command-line>fimo --oc fimo_Cyto_motif_on_Cyto_seq ./meme_files/Cyto_specific_motifs.meme /lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/circRNA_ligated/Cyto_sequences.fasta</command-line>
+<command-line>fimo --oc fimo_Cyto_motif_on_Cyto_seq ./meme_files/Cyto_specific_motifs.meme ../../circRNA_ligated/Cyto_sequences.fasta</command-line>
 <pattern-file>./meme_files/Cyto_specific_motifs.meme</pattern-file>
-<sequence-file>/lulabdata3/huangkeyun/zhangys/RNA_locator/motif_analysis/circRNA_ligated/Cyto_sequences.fasta</sequence-file>
+<sequence-file>../../circRNA_ligated/Cyto_sequences.fasta</sequence-file>
 <site-pvalue-cutoff>0.0001</site-pvalue-cutoff>
 <sequence-filtering on-off="off"/>
 </parameters>
